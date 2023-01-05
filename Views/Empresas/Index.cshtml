@@ -1,0 +1,64 @@
+﻿@model IEnumerable<PWEB.Models.Empresa>
+
+@{
+    ViewData["Title"] = "Gestão de Empresas";
+}
+
+<h1>Gestão de Empresas</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponivel)
+            </th>
+            <th>
+                @Html.Encode("Subscricao")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eliminar)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                    @if (@item.Disponivel)
+                    {
+                        @Html.Encode("Activa")
+                    }
+                    else
+                    {
+                        @Html.Encode("Inativa")
+                    }
+            </td>
+            <td>
+                    @if (@item.atualizaSubs())
+                    {
+                        @Html.Encode("Activa")
+                    }
+                    else {@Html.Encode("Inativa")}  
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Eliminar)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

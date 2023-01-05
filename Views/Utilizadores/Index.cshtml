@@ -1,0 +1,110 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<PWEB.Models.Utilizador>
+
+@{
+    ViewData["Title"] = "Gestão de Utilizadores";
+}
+
+<h1>Gestão de Utilizadores</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apelido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NIF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Morada)
+            </th>
+                        <th>
+                @Html.DisplayNameFor(model => model.DataNascimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroCartaoMultibanco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValidadeCartaoMultibanco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CvdCartaoMultibanco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponivel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eliminar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.empresa)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apelido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NIF)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Morada)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataNascimento)
+                </td>
+                                <td>
+                    @Html.DisplayFor(modelItem => item.NumeroCartaoMultibanco)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => item.ValidadeCartaoMultibanco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CvdCartaoMultibanco)
+                </td>             
+                <td>
+                        @if (@item.Disponivel)
+                        {
+                            @Html.Encode("Activo")
+                        }
+                        else
+                        {
+                            @Html.Encode("Inativo")
+                        }
+                </td>         
+                <td>
+                    @Html.DisplayFor(modelItem => item.Eliminar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.empresa.Nome)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

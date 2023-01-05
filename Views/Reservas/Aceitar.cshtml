@@ -1,0 +1,92 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model PWEB.Models.Reserva
+
+
+<h4>Aceitar Reserva</h4>
+<hr />
+<div class="row">
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DataDeLevantaneto)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataDeLevantaneto)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DataDeEntrega)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataDeEntrega)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Eliminar)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Eliminar)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Veiculo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Veiculo.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Entrega)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Entrega.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Recolha)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Recolha.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Avaliacao)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Avaliacao.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.empresa)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.empresa.Nome)
+        </dd>
+    </dl>
+    <div class="col-md-4">
+        <form asp-action="Aceitar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="DataDeLevantaneto" />
+            <input type="hidden" asp-for="DataDeEntrega" />
+            <input type="hidden" asp-for="Eliminar" />
+            <input type="hidden" asp-for="VeiculoId" />
+            <input type="hidden" asp-for="EmpresaId" />
+            <input type="hidden" asp-for="EntregaId" />
+            <input type="hidden" asp-for="RecolhaId" />
+            <input type="hidden" asp-for="AvaliacaoId" />
+
+            <div class="form-group">
+                <input type="submit" value="Aceitar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

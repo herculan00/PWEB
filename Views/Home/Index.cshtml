@@ -1,0 +1,90 @@
+﻿@model PWEB.Helpers.InputInicial;
+
+@{
+    ViewData["Title"] = "PWEB";
+}
+
+
+<form asp-controller="Cursos" asp-action="Search" >
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="d-inline-block">
+
+        <div class="d-inline-block" style=" border: 10px solid black";>
+            <p>Localização de levantamento</p>
+            <input id="pesquisa"   name="TextoAPesquisar" placeholder="Pesquisa" >
+        </div>
+
+        <div class="d-inline-block" style=" border: 10px solid black;">
+            <p>Levantar</p>
+            <input id="levantar" name="levantar" type="date">
+        </div>
+
+        <div class="d-inline-block" style=" border: 10px solid black;">
+            <p>Entregar</p>
+            <input id="entrega" name="levantar" type="date">
+        </div>
+
+        <div class="d-lg-inline-block" style=" border: 10px solid black;">
+           
+            <input type="submit">
+        </div>        
+    </div>
+</form>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="InputInicial">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Localizacao" class="control-label"></label>
+                <input asp-for="Localizacao" asp-items="ViewBag.ListaCategorias" class="form-control" />
+                <span asp-validation-for="Localizacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Levantamento" class="control-label"></label>
+                <input asp-for="Levantamento" class="form-control" />
+                <span asp-validation-for="Levantamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Entrega" class="control-label"></label>
+                <input asp-for="Entrega" class="form-control" />
+                <span asp-validation-for="Entrega" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="InputInicial" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Rental4You</a>
+
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <label asp-for="Localizacao" class="control-label"></label>
+                    <input asp-for="Localizacao" asp-items="ViewBag.ListaCategorias" class="form-control" />
+                    <span asp-validation-for="Localizacao" class="text-danger"></span>
+                </li>
+                <li class="nav-item">
+                    <label asp-for="Levantamento" class="control-label"></label>
+                    <input asp-for="Levantamento" class="form-control" />
+                    <span asp-validation-for="Levantamento" class="text-danger"></span>
+                </li>
+                <li class="nav-item">
+                    <label asp-for="Entrega" class="control-label"></label>
+                    <input asp-for="Entrega" class="form-control" />
+                    <span asp-validation-for="Entrega" class="text-danger"></span>
+                </li>
+                <li class="nav-item">
+                    <input type="submit" value="InputInicial" class="btn btn-primary" />
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>

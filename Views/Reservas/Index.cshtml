@@ -1,0 +1,77 @@
+﻿@model IEnumerable<PWEB.Models.Reserva>
+
+@{
+    ViewData["Title"] = "Gestão de Reservas";
+}
+
+<h1>Gestão de Reservas</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DataDeLevantaneto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataDeEntrega)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eliminar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Veiculo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Entrega)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Recolha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Avaliacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.empresa)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataDeLevantaneto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataDeEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Eliminar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Veiculo.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Entrega.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recolha.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Avaliacao.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.empresa.Nome)
+            </td>
+            <td>
+                <a asp-action="Aceitar" asp-route-id="@item.Id">Aceitar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
