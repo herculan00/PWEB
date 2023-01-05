@@ -47,6 +47,12 @@ namespace PWEB.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin,Funcionario,Gestor,Cliente")]
+        public  IActionResult Criar()
+        {
+            return RedirectToAction("Create");
+        }
+
         // GET: Reservas/Details/5
         public async Task<IActionResult> Details(int? id)
         {

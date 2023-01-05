@@ -103,13 +103,13 @@ namespace PWEB.Areas.Identity.Pages.Account
             // Os atributos abaixo servem para completar a classe utilizador criada
             [Required]
             [DataType(DataType.Text)]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [Display(Name = "Nome")]
             public string Nome { get; set; }
 
             [Required]
             [DataType(DataType.Text)]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [Display(Name = "Apelido")]
             public string Apelido { get; set; }
 
@@ -140,10 +140,6 @@ namespace PWEB.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "CvdCartaoMultibanco")]
             public int CvdCartaoMultibanco { get; set; }
-
-            [Required]
-            [Display(Name = "Disponivel")]
-            public bool Disponivel { get; set; }
 
 
             [DataType(DataType.DateTime)]
@@ -210,16 +206,13 @@ namespace PWEB.Areas.Identity.Pages.Account
                     user.CvdCartaoMultibanco = Input.CvdCartaoMultibanco;
                     await _userManager.UpdateAsync(user);
                 }
-                if (user.Disponivel != Input.Disponivel)
-                {
-                    user.Disponivel = Input.Disponivel;
-                    await _userManager.UpdateAsync(user);
-                }
                 if (user.Eliminar != Input.Eliminar)
                 {
                     user.Eliminar = Input.Eliminar;
                     await _userManager.UpdateAsync(user);
                 }
+                user.Disponivel = false;
+                await _userManager.UpdateAsync(user);
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

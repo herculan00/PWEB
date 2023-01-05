@@ -28,10 +28,51 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.Nome" class="form-control" autocomplete="new-password" aria-required="true" />
+                <input asp-for="Input.Nome" class="form-control"  aria-required="true" />
                 <label asp-for="Input.Nome"></label>
                 <span asp-validation-for="Input.Nome" class="text-danger"></span>
             </div>
+            <div class="form-floating">
+                <input asp-for="Input.Apelido" class="form-control" aria-required="true" />
+                <label asp-for="Input.Apelido"></label>
+                <span asp-validation-for="Input.Apelido" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.NIF" class="form-control"  aria-required="true" />
+                <label asp-for="Input.NIF"></label>
+                <span asp-validation-for="Input.NIF" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Morada" class="form-control"  aria-required="true" />
+                <label asp-for="Input.Morada"></label>
+                <span asp-validation-for="Input.Morada" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.DataNascimento" class="form-control"  aria-required="true" />
+                <label asp-for="Input.DataNascimento"></label>
+                <span asp-validation-for="Input.DataNascimento" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.NumeroCartaoMultibanco" class="form-control"  aria-required="true" />
+                <label asp-for="Input.NumeroCartaoMultibanco"></label>
+                <span asp-validation-for="Input.NumeroCartaoMultibanco" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.ValidadeCartaoMultibanco" class="form-control"  aria-required="true" />
+                <label asp-for="Input.ValidadeCartaoMultibanco"></label>
+                <span asp-validation-for="Input.ValidadeCartaoMultibanco" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.CvdCartaoMultibanco" class="form-control" aria-required="true" />
+                <label asp-for="Input.CvdCartaoMultibanco"></label>
+                <span asp-validation-for="Input.CvdCartaoMultibanco" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Eliminar" class="form-control" aria-required="false" />
+                <label asp-for="Input.Eliminar"></label>
+                <span asp-validation-for="Input.Eliminar" class="text-danger"></span>
+            </div>
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
