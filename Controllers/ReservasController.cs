@@ -83,24 +83,8 @@ namespace PWEB.Controllers
         }
 
         // GET: Reservas/Create
-        public IActionResult Create(int? id)
+        public IActionResult Create()  // id é do veiculo 
         {
-            if (id != null && _context.Veiculos != null)
-            {
-                var v = _context.Veiculos.Where(v => v.Id == id)
-                    .Include(v => v.Tipo)
-                    .Include(v => v.empresa)
-                    .FirstOrDefault();
-
-                ViewData["AvaliacaoId"] = new SelectList(_context.Avaliacoes, "Id", "Id");
-                ViewData["EntregaId"] = new SelectList(_context.Entregas, "Id", "Id");
-                ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id");
-                ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id",id);
-                ViewData["Veiculo"] = v;
-
-                return View();
-            }
-
             ViewData["AvaliacaoId"] = new SelectList(_context.Avaliacoes, "Id", "Id");
             ViewData["EntregaId"] = new SelectList(_context.Entregas, "Id", "Id");
             ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id");
@@ -298,7 +282,7 @@ namespace PWEB.Controllers
         }
 
         // GET: Reservas/Aceitar/5
-        public async Task<IActionResult> Aceitar(int? id)
+        public async Task<IActionResult> Aceitar(int? id) // id reserva
         {
             if (id == null || _context.Reserva == null || _context.Empresas == null)
             {
@@ -358,6 +342,14 @@ namespace PWEB.Controllers
                 return NotFound();
             }
 
+            // adicionar o funcionario que esta a aceitar a reserva 
+            var userFunci = await _userManager.GetUserAsync(User);
+            if (userFunci == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+
+            }
+
             ModelState.Remove(nameof(reserva.Avaliacao));
             ModelState.Remove(nameof(reserva.Entrega));
             ModelState.Remove(nameof(reserva.Recolha));
@@ -370,17 +362,10 @@ namespace PWEB.Controllers
                 try
                 {
                     // adicionar o funcionario que esta a acitar a reserva 
-                    var userFunci = await _userManager.GetUserAsync(User);
-                    if (userFunci == null)
-                    {
-                        return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-
-                    }
-                    var array = fReserva.EmpregadoCliente;
 
                     fReserva.EmpregadoCliente.Add(userFunci);
 
-                    _context.Update(reserva);
+                    _context.Update(fReserva);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -394,10 +379,10 @@ namespace PWEB.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Create","Entregas", new {rId = fReserva.Id, fId = userFunci.Id});
             }
 
-            return View(reserva);
+            return View(fReserva);
         }
     }
 }
