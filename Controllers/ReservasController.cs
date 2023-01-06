@@ -48,9 +48,15 @@ namespace PWEB.Controllers
         }
 
         [Authorize(Roles = "Admin,Funcionario,Gestor,Cliente")]
-        public  IActionResult Criar()
+
+        public async Task<IActionResult> Criar()
         {
-            return RedirectToAction("Create");
+            if (_context.Veiculos == null)
+            {
+                return NotFound();
+            }
+
+            return View( await _context.Veiculos.Include(v => v.Tipo).Include(v => v.empresa).ToListAsync());
         }
 
         // GET: Reservas/Details/5
@@ -77,8 +83,24 @@ namespace PWEB.Controllers
         }
 
         // GET: Reservas/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
+            if (id != null && _context.Veiculos != null)
+            {
+                var v = _context.Veiculos.Where(v => v.Id == id)
+                    .Include(v => v.Tipo)
+                    .Include(v => v.empresa)
+                    .FirstOrDefault();
+
+                ViewData["AvaliacaoId"] = new SelectList(_context.Avaliacoes, "Id", "Id");
+                ViewData["EntregaId"] = new SelectList(_context.Entregas, "Id", "Id");
+                ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id");
+                ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id",id);
+                ViewData["Veiculo"] = v;
+
+                return View();
+            }
+
             ViewData["AvaliacaoId"] = new SelectList(_context.Avaliacoes, "Id", "Id");
             ViewData["EntregaId"] = new SelectList(_context.Entregas, "Id", "Id");
             ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id");

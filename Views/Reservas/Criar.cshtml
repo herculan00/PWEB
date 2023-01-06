@@ -1,0 +1,92 @@
+﻿@model IEnumerable<PWEB.Models.Veiculo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Primeiro selecione um veiculo</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Marca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modelo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lugares)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MudançasManuais)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreçoPorHora)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Localização)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponivel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eliminar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.empresa)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Marca)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Modelo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lugares)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MudançasManuais)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PreçoPorHora)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Localização)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Disponivel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Eliminar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipo.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.empresa.Nome)
+                </td>
+                <td>
+                    <a asp-controller="Reservas" asp-action="Create" asp-route-id="@item.Id">Reservar</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
