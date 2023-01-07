@@ -74,6 +74,8 @@
             </td>
             <td>
                 <a asp-action="Aceitar" asp-route-id="@item.Id">Aceitar</a> |
+                <a asp-controller="Entregas" asp-action="Create" asp-route-rId="@item.Id">Entrega</a> |
+                <a asp-controller="Recolhas" asp-action="Create" asp-route-rId="@item.Id">Recolha</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>

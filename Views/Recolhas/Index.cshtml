@@ -1,10 +1,10 @@
-﻿@model IEnumerable<PWEB.Models.Entrega>
+﻿@model IEnumerable<PWEB.Models.Recolha>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Gestão de Entregas</h1>
+<h1>Gestão de Recolhas</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -27,6 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Empregado)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Images)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -48,6 +51,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Empregado.Email)
             </td>
+                @{
+                    if (item.Images != null)
+                    {
+                        foreach (var img in item.Images)
+                        {
+                            <td>
+                                @Html.Encode(img)
+                            </td>
+                        }
+                    }
+                }
+            
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

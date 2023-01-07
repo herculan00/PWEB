@@ -1,10 +1,10 @@
-﻿@model IEnumerable<PWEB.Models.Entrega>
+﻿@model IEnumerable<PWEB.Models.Imagem>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Gestão de Entregas</h1>
+<h1>Gestão de Imagens</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,19 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Kilometros)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Danos)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Observaçoes)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Empregado)
+                @Html.DisplayNameFor(model => model.imagem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Recolha)
             </th>
             <th></th>
         </tr>
@@ -34,19 +31,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Kilometros)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Danos)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Observaçoes)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Empregado.Email)
+                @Html.DisplayFor(modelItem => item.imagem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recolha.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

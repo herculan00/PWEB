@@ -12,14 +12,14 @@ using PWEB.ViewModel;
 
 namespace PWEB.Controllers
 {
-    public class EntregasController : Controller
+    public class RecolhasController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Utilizador> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
 
-        public EntregasController(ApplicationDbContext context
+        public RecolhasController(ApplicationDbContext context
             , UserManager<Utilizador> userManager
             , RoleManager<IdentityRole> roleManager)
         {
@@ -28,56 +28,66 @@ namespace PWEB.Controllers
             _userManager = userManager;
         }
 
-        // GET: Entregas
+        // GET: Recolhas
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Entregas.Include(e => e.Empregado);
+            var applicationDbContext = _context.Recolhas.Include(r => r.Empregado);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Entregas/Details/5
+        // GET: Recolhas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Entregas == null)
+            if (id == null || _context.Recolhas == null)
             {
                 return NotFound();
             }
 
-            var entrega = await _context.Entregas
-                .Include(e => e.Empregado)
+            var recolha = await _context.Recolhas
+                .Include(r => r.Empregado)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (entrega == null)
+            if (recolha == null)
             {
                 return NotFound();
             }
 
-            return View(entrega);
+            return View(recolha);
         }
 
-        // GET: Entregas/Create
-        public async Task<IActionResult> Create(int? id ,string rId, string? fId)
+        // GET: Recolhas/Create
+        public async Task<IActionResult> Create(int? id, string rId, string? fId)
         {
-            if ( _context.Reserva == null)
+
+            if (_context.Reserva == null)
             {
                 return NotFound();
             }
 
-            
             var user = await _userManager.GetUserAsync(User);
             var reserva = await _context.Reserva
                 .Include(r => r.EmpregadoCliente)
                 .FirstOrDefaultAsync(r => r.Id == Int32.Parse(rId));
 
             if (fId == null)
-            {         
+            {
                 fId = user.Id;
             }
 
-            // Verificar se a reserga ja tem uma entrega
-            if (reserva.EntregaId != null)
+            // Verificar se a reserga ja tem uma recolha
+            if (reserva.RecolhaId != null)
             {
                 ErroViewModel e = new ErroViewModel();
-                e.Mensagem = "A reserva ja esta entrege";
+                e.Mensagem = "A reserva ja foi recolhida";
+                e.Controller = "Reservas";
+
+                return View("Erro", e);
+            }
+
+            // Verificar se a reserga ja tem uma entrega
+            if (reserva.EntregaId == null)
+            {
+                ErroViewModel e = new ErroViewModel();
+                e.Mensagem = "Primeiro tem de ser realizada a entrega";
                 e.Controller = "Reservas";
 
                 return View("Erro", e);
@@ -93,34 +103,34 @@ namespace PWEB.Controllers
                 return View("Erro", e);
             }
 
-            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Email",fId);
+            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Email", fId);
             ViewData["Reserva"] = rId;
 
             return View();
         }
 
-        // POST: Entregas/Create
+        // POST: Recolhas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int rId,[Bind("Id,Kilometros,Danos,Observaçoes,EmpregadoId")] Entrega entrega)
+        public async Task<IActionResult> Create(int rId, [Bind("Id,Kilometros,Danos,Observaçoes,EmpregadoId")] Recolha recolha)
         {
-
-            ModelState.Remove(nameof(entrega.Empregado));
+            ModelState.Remove(nameof(recolha.Empregado));
             if (ModelState.IsValid)
             {
-                // adicionar a entrega a reseverva
+
+                // adicionar a recolha a reseverva
                 if (_context.Reserva == null)
                 {
                     return NotFound();
                 }
 
-                // primeiro adicionar entrega a BD e actualizar
-                _context.Add(entrega);
-               await _context.SaveChangesAsync();
+                // primeiro adicionar recolha a BD e actualizar
+                _context.Add(recolha);
+                await _context.SaveChangesAsync();
 
-                // actualizar a reserva com a entrega e adicionar a BD
+                // actualizar a reserva com a recolha e adicionar a BD
                 var r = await _context.Reserva
                 .Include(r => r.Avaliacao).
                 Include(r => r.Entrega).
@@ -129,7 +139,7 @@ namespace PWEB.Controllers
                 Include(r => r.empresa).
                 Include(r => r.EmpregadoCliente).
                 FirstOrDefaultAsync(r => r.Id == rId);
-                r.EntregaId = entrega.Id;
+                r.RecolhaId = recolha.Id;
 
                 _context.Update(r);
 
@@ -138,50 +148,49 @@ namespace PWEB.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Email", entrega.EmpregadoId);
-            return View(entrega);
+            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Email", recolha.EmpregadoId);
+            return View(recolha);
         }
 
-        // GET: Entregas/Edit/5
+        // GET: Recolhas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Entregas == null)
+            if (id == null || _context.Recolhas == null)
             {
                 return NotFound();
             }
 
-            var entrega = await _context.Entregas.FindAsync(id);
-            if (entrega == null)
+            var recolha = await _context.Recolhas.FindAsync(id);
+            if (recolha == null)
             {
                 return NotFound();
             }
-            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Email", entrega.EmpregadoId);
-            return View(entrega);
+            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Id", recolha.EmpregadoId);
+            return View(recolha);
         }
 
-        // POST: Entregas/Edit/5
+        // POST: Recolhas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Kilometros,Danos,Observaçoes,EmpregadoId")] Entrega entrega)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Kilometros,Danos,Observaçoes,EmpregadoId")] Recolha recolha)
         {
-            if (id != entrega.Id)
+            if (id != recolha.Id)
             {
                 return NotFound();
             }
 
-            ModelState.Remove(nameof(entrega.Empregado));
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(entrega);
+                    _context.Update(recolha);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EntregaExists(entrega.Id))
+                    if (!RecolhaExists(recolha.Id))
                     {
                         return NotFound();
                     }
@@ -192,51 +201,51 @@ namespace PWEB.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Email", entrega.EmpregadoId);
-            return View(entrega);
+            ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Id", recolha.EmpregadoId);
+            return View(recolha);
         }
 
-        // GET: Entregas/Delete/5
+        // GET: Recolhas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Entregas == null)
+            if (id == null || _context.Recolhas == null)
             {
                 return NotFound();
             }
 
-            var entrega = await _context.Entregas
-                .Include(e => e.Empregado)
+            var recolha = await _context.Recolhas
+                .Include(r => r.Empregado)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (entrega == null)
+            if (recolha == null)
             {
                 return NotFound();
             }
 
-            return View(entrega);
+            return View(recolha);
         }
 
-        // POST: Entregas/Delete/5
+        // POST: Recolhas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Entregas == null)
+            if (_context.Recolhas == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Entregas'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Recolhas'  is null.");
             }
-            var entrega = await _context.Entregas.FindAsync(id);
-            if (entrega != null)
+            var recolha = await _context.Recolhas.FindAsync(id);
+            if (recolha != null)
             {
-                _context.Entregas.Remove(entrega);
+                _context.Recolhas.Remove(recolha);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EntregaExists(int id)
+        private bool RecolhaExists(int id)
         {
-          return _context.Entregas.Any(e => e.Id == id);
+          return _context.Recolhas.Any(e => e.Id == id);
         }
     }
 }
