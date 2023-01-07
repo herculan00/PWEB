@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Confirmado)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.DataDeLevantaneto)
             </th>
             <th>
@@ -42,6 +45,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Confirmado)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataDeLevantaneto)
             </td>

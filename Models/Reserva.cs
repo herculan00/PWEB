@@ -7,6 +7,7 @@ namespace PWEB.Models
        public int Id { get; set; }
        public DateTime DataDeLevantaneto { get; set; }
        public DateTime DataDeEntrega { get; set; }
+       public bool?  Confirmado { get; set; } = false;
 
        public DateTime? Eliminar { get; set; }
 

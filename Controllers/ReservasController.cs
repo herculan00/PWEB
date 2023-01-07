@@ -364,6 +364,7 @@ namespace PWEB.Controllers
                     // adicionar o funcionario que esta a acitar a reserva 
 
                     fReserva.EmpregadoCliente.Add(userFunci);
+                    fReserva.Confirmado = true;
 
                     _context.Update(fReserva);
                     await _context.SaveChangesAsync();
@@ -379,7 +380,7 @@ namespace PWEB.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Create","Entregas", new {rId = fReserva.Id, fId = userFunci.Id});
+                return RedirectToAction("Index","Reservas");
             }
 
             return View(fReserva);
