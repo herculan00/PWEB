@@ -27,8 +27,7 @@
                 <input type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg" id="ImgFile2" name="ImgFile2" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="RecolhaId" class="control-label"></label>
-                <select asp-for="RecolhaId" class ="form-control" asp-items="ViewBag.RecolhaId"></select>
+                <select hidden asp-for="RecolhaId" class ="form-control" asp-items="ViewBag.RecolhaId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

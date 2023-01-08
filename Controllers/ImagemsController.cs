@@ -56,9 +56,9 @@ namespace PWEB.Controllers
         }
 
         // GET: Imagems/Create
-        public IActionResult Create()
+        public IActionResult Create(int rId)
         {
-            ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id");
+            ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id",rId);
             return View();
         }
 
