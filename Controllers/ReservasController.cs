@@ -385,5 +385,48 @@ namespace PWEB.Controllers
 
             return View(fReserva);
         }
+
+        // GET: Reservas/Historico
+        [Authorize(Roles = "Admin,Funcionario,Gestor,Cliente")]
+        public async Task<IActionResult> Historico()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+
+            }
+
+            if (_context.Reserva == null)
+            {
+                return NotFound();
+            }
+            var reservas = _context.Reserva.
+                Include(r => r.Avaliacao).
+                Include(r => r.Entrega).
+                Include(r => r.Recolha).
+                Include(r => r.Veiculo).
+                Include(r => r.empresa).
+                Include(r => r.EmpregadoCliente);
+
+            var rHistorico = new List<Reserva>();
+
+            // encontrar os clientes associados as reservas
+            foreach (var r in reservas)
+            {
+                foreach (var c in r.EmpregadoCliente)
+                {
+                    // so me intressa o cliente e não o funcionario que tem um EmpresaId != null
+                    if (c.EmpresaId == null && c.Id == user.Id)
+                    {
+                        rHistorico.Add(r);
+                    }
+                }
+            }
+                
+
+            return View(rHistorico);
+        }
     }
 }

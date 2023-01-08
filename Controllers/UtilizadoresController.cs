@@ -31,14 +31,14 @@ namespace PWEB.Controllers
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-                
+
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
             if (userRoles.Contains(Roles.Admin.ToString()))
             {
-                return View( _userManager.Users.Include(e=>e.empresa));
+                return View(_userManager.Users.Include(e => e.empresa));
             }
 
             if (userRoles.Contains(Roles.Gestor.ToString()))
@@ -97,14 +97,14 @@ namespace PWEB.Controllers
             {
                 return NotFound();
             }
- 
+
             ModelState.Remove(nameof(utilizador.empresa));
             if (ModelState.IsValid)
             {
                 try
                 {
-                     _context.Update(utilizador);
-                     await _context.SaveChangesAsync();
+                    _context.Update(utilizador);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -132,16 +132,16 @@ namespace PWEB.Controllers
 
 
 
-            return View( await _userManager.Users.Include(e => e.empresa).Where(u => u.Id == id).FirstOrDefaultAsync());
+            return View(await _userManager.Users.Include(e => e.empresa).Where(u => u.Id == id).FirstOrDefaultAsync());
         }
 
         // GET: Utilizador/Create
         public IActionResult Create()
         {
-           List<String> lista = new List<String>();
+            List<String> lista = new List<String>();
             lista.Add(Roles.Funcionario.ToString());
             lista.Add(Roles.Gestor.ToString());
-           
+
             ViewData["RolesId"] = new SelectList(lista);
             return View();
         }
@@ -149,10 +149,10 @@ namespace PWEB.Controllers
         // POST: Utilizador/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("role")] String role,[Bind("Id,Nome,Apelido,NIF,Morada,DataNascimento," +
+        public async Task<IActionResult> Create([Bind("role")] String role, [Bind("Id,Nome,Apelido,NIF,Morada,DataNascimento," +
             "NumeroCartaoMultibanco,ValidadeCartaoMultibanco,CvdCartaoMultibanco,Disponivel," +
             "Eliminar,Email")] Utilizador utilizador)
         {
@@ -175,7 +175,7 @@ namespace PWEB.Controllers
                 if (user == null)
                 {
                     await _userManager.CreateAsync(utilizador, "Util10.");
-                    await _userManager.AddToRoleAsync(utilizador,role);
+                    await _userManager.AddToRoleAsync(utilizador, role);
                 }
 
                 await _context.SaveChangesAsync();
