@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PWEB.Data;
 
@@ -11,9 +12,10 @@ using PWEB.Data;
 namespace PWEB.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230108145617_m7_avaliacao_valor_null")]
+    partial class m7_avaliacao_valor_null
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,7 +203,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("EmpresaId");
 
-                    b.ToTable("Avaliacoes", (string)null);
+                    b.ToTable("Avaliacoes");
                 });
 
             modelBuilder.Entity("PWEB.Models.Empresa", b =>
@@ -224,7 +226,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Empresas", (string)null);
+                    b.ToTable("Empresas");
                 });
 
             modelBuilder.Entity("PWEB.Models.Entrega", b =>
@@ -252,7 +254,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("EmpregadoId");
 
-                    b.ToTable("Entregas", (string)null);
+                    b.ToTable("Entregas");
                 });
 
             modelBuilder.Entity("PWEB.Models.Imagem", b =>
@@ -279,7 +281,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("RecolhaId");
 
-                    b.ToTable("Imagens", (string)null);
+                    b.ToTable("Imagens");
                 });
 
             modelBuilder.Entity("PWEB.Models.Recolha", b =>
@@ -307,7 +309,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("EmpregadoId");
 
-                    b.ToTable("Recolhas", (string)null);
+                    b.ToTable("Recolhas");
                 });
 
             modelBuilder.Entity("PWEB.Models.Reserva", b =>
@@ -357,7 +359,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("VeiculoId");
 
-                    b.ToTable("Reserva", (string)null);
+                    b.ToTable("Reserva");
                 });
 
             modelBuilder.Entity("PWEB.Models.Subscricao", b =>
@@ -389,7 +391,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("TipoId");
 
-                    b.ToTable("Subscricoes", (string)null);
+                    b.ToTable("Subscricoes");
                 });
 
             modelBuilder.Entity("PWEB.Models.TipoSubs", b =>
@@ -412,7 +414,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TiposSubs", (string)null);
+                    b.ToTable("TiposSubs");
                 });
 
             modelBuilder.Entity("PWEB.Models.TipoVeiculo", b =>
@@ -429,7 +431,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TiposVeis", (string)null);
+                    b.ToTable("TiposVeis");
                 });
 
             modelBuilder.Entity("PWEB.Models.Utilizador", b =>
@@ -582,7 +584,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("TipoId");
 
-                    b.ToTable("Veiculos", (string)null);
+                    b.ToTable("Veiculos");
                 });
 
             modelBuilder.Entity("ReservaUtilizador", b =>
@@ -597,7 +599,7 @@ namespace PWEB.Data.Migrations
 
                     b.HasIndex("ReservasId");
 
-                    b.ToTable("ReservaUtilizador", (string)null);
+                    b.ToTable("ReservaUtilizador");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

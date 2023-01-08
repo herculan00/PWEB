@@ -87,10 +87,11 @@ namespace PWEB.Controllers
                     cId = c.Id;
                 }
             }
+
             
             ViewData["ClienteId"] = new SelectList(_context.Users, "Id", "Id",cId);
             ViewData["rId"] = rId;
-       
+
             return View();
         }
 
@@ -104,6 +105,12 @@ namespace PWEB.Controllers
             ModelState.Remove(nameof(avaliacao.Cliente));
             if (ModelState.IsValid)
             {
+                // actulizar o valor da avaliação com base nos parametros
+
+                avaliacao.Valor = (avaliacao.TempoLevantamento + avaliacao.FacilidadeEncontrar +
+                    avaliacao.LimpezaCarro + avaliacao.Prestabilidade + avaliacao.VelocidadeDevolucao +
+                    avaliacao.CondicaoCarro) / 6.0;
+
                 // primeiro adicionar avaliacao a BD e actualizar
                 _context.Add(avaliacao);
                 await _context.SaveChangesAsync();
@@ -133,6 +140,7 @@ namespace PWEB.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClienteId"] = new SelectList(_context.Users, "Id", "Id", avaliacao.ClienteId);
+            ViewData["rId"] = rId;
             return View(avaliacao);
         }
 

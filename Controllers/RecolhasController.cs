@@ -149,6 +149,7 @@ namespace PWEB.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EmpregadoId"] = new SelectList(_context.Users, "Id", "Email", recolha.EmpregadoId);
+            ViewData["Reserva"] = rId;
             return View(recolha);
         }
 
