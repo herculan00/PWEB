@@ -43,6 +43,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.empresa)
             </th>
+            <th>
+                @Html.Encode("Classificacao")
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -82,6 +85,18 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.empresa.Nome)
+                </td>
+                <td>
+                    @{
+                        double r;
+                        foreach (Empresa e in ViewBag.es)
+                        {
+                            if (e.Id == item.EmpresaId)
+                            {
+                                e.atualizaAvaliacao();
+                            }
+                        }
+                    }
                 </td>
                 <td>
                     <a asp-controller="Reservas" asp-action="Create">Reservar</a> |

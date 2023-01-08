@@ -116,7 +116,7 @@ namespace PWEB.Controllers
                 await _context.SaveChangesAsync();
 
                 // adicionar a avaliacao a reseverva
-                if (_context.Reserva == null)
+                if (_context.Reserva == null || _context.Empresas == null)
                 {
                     return NotFound();
                 }
@@ -133,6 +133,19 @@ namespace PWEB.Controllers
                 r.AvaliacaoId = avaliacao.Id;
 
                 _context.Update(r);
+                await _context.SaveChangesAsync();
+
+                var e = await _context.Empresas
+                     .Include(e => e.Empregados)
+                     .Include(e => e.Veiculos)
+                     .Include(e => e.Subscricoes)
+                     .Include(e => e.Avaliacoes)
+                     .Include(e => e.Reservas)
+                     .FirstOrDefaultAsync(e => e.Id == r.EmpresaId);
+
+                e.Reservas.Add(r);
+
+                _context.Update(e);
 
                 // por fin guardar as akteraçoes na BD
                 await _context.SaveChangesAsync();

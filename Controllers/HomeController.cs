@@ -44,7 +44,7 @@ namespace PWEB.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Localizacao,Tipo,Levantamento,Entrega")] InputInicial ip)
+        public async Task<IActionResult> Create([Bind("Localizacao,TipoId,Levantamento,Entrega")] InputInicial ip)
         {
 
             if (_context.Empresas == null || _context.Veiculos == null)
@@ -60,12 +60,18 @@ namespace PWEB.Controllers
                 var c = await _context.Veiculos
                     .Include(v => v.Tipo)
                     .Include(v => v.empresa)
-                    .Where(v => v.Localização.Contains(ip.Localizacao))
+                    .Where(v => v.Localização.Contains(ip.Localizacao) && v.Tipo.Id == ip.TipoId)
                     .ToListAsync();
 
-                // Verificar se eles estao disponiveis na data desejada pelo utilizador 
+                // Verificar se eles estao disponiveis na empresa na data desejada pelo utilizador 
 
-                var e = await _context.Empresas.ToListAsync();
+                var e = await _context.Empresas
+                    .Include(e => e.Empregados)
+                    .Include(e => e.Veiculos)
+                    .Include(e => e.Subscricoes)
+                    .Include(e => e.Avaliacoes)
+                    .Include(e => e.Reservas)
+                    .ToListAsync();
 
                 var x = 45;
 

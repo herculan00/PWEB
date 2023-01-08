@@ -28,7 +28,5 @@ namespace PWEB.Models
        public int? AvaliacaoId { get; set; }
        public Avaliacao? Avaliacao { get; set; } // 1-to-1 Relacao
 
-
-
     }
 }

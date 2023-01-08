@@ -30,31 +30,5 @@
             }
             return false;
         }
-
-        public double? atualizaAvaliacao()
-        {
-            if (Avaliacoes == null || Avaliacoes.Count == 0)
-            {
-                return 0.0;
-            }
-
-            double? a1 = 0.0;
-
-            foreach (var item in Avaliacoes)
-            {
-                if (item.Valor != null)
-                {
-                    a1 += item.Valor;
-                }
-                else
-                {
-                    continue;
-                }
-
-            }
-
-            return a1 / Avaliacoes.Count;
-
-        }
     }
 }

@@ -51,10 +51,28 @@ namespace PWEB.Controllers
 
         public async Task<IActionResult> Criar()
         {
-            if (_context.Veiculos == null)
+            if (_context.Veiculos == null || _context.Empresas == null || _context.Reserva == null)
             {
                 return NotFound();
             }
+
+            var rs = await _context.Reserva.
+                 Include(r => r.Avaliacao).
+                 Include(r => r.Entrega).
+                 Include(r => r.Recolha).
+                 Include(r => r.Veiculo).
+                 Include(r => r.empresa).ToArrayAsync();
+
+            var es = await _context.Empresas
+                .Include(e => e.Empregados)
+                .Include(e => e.Veiculos)
+                .Include(e => e.Subscricoes)
+                .Include(e => e.Avaliacoes)
+                .Include(e => e.Reservas).ToArrayAsync();
+
+
+            ViewData["rs"] = rs;
+            ViewData["es"] = es;
 
             return View( await _context.Veiculos.Include(v => v.Tipo).Include(v => v.empresa).ToListAsync());
         }
