@@ -3,7 +3,7 @@
     public class Avaliacao
     {
         public int Id { get; set; }
-        public double Valor { get; set; }
+        public double? Valor { get; set; }
         public double TempoLevantamento{ get; set; }
         public double LimpezaCarro { get; set; }
         public double FacilidadeEncontrar { get; set; }

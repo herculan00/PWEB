@@ -83,7 +83,7 @@ namespace PWEB.Controllers
         }
 
         // GET: Reservas/Create
-        public IActionResult Create()  // id é do veiculo 
+        public IActionResult Create()  
         {
             ViewData["AvaliacaoId"] = new SelectList(_context.Avaliacoes, "Id", "Id");
             ViewData["EntregaId"] = new SelectList(_context.Entregas, "Id", "Id");

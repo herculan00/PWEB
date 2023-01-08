@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,17 @@ namespace PWEB.Controllers
     public class AvaliacaosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Utilizador> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AvaliacaosController(ApplicationDbContext context)
+
+        public AvaliacaosController(ApplicationDbContext context
+            , UserManager<Utilizador> userManager
+            , RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         // GET: Avaliacaos
@@ -49,6 +57,7 @@ namespace PWEB.Controllers
         // GET: Avaliacaos/Create
         public async Task<IActionResult> Create(int rId)
         {
+
             if (_context.Reserva == null)
             {
                 return NotFound();
@@ -62,21 +71,26 @@ namespace PWEB.Controllers
                 Include(r => r.EmpregadoCliente).
                 FirstOrDefaultAsync(r => r.Id == rId);
 
-            // encontrar os clientes associados as reservas
+            if (reservas == null)
+            {
+                return NotFound();
+            }
 
-            //foreach (var r in reservas)
-            //{
-            //    foreach (var c in r.EmpregadoCliente)
-            //    {
-            //        // so me intressa o cliente e não o funcionario que tem um EmpresaId != null
-            //        if (c.EmpresaId == null && c.Id == user.Id)
-            //        {
-            //            rHistorico.Add(r);
-            //        }
-            //    }
-            //}
+            // encontrar os cliente associado a reserva
+            string cId="";
 
+            foreach (var c in reservas.EmpregadoCliente)
+            {
+                // so me intressa o cliente e não o funcionario que tem um EmpresaId != null
+                if (c.EmpresaId == null)
+                {
+                    cId = c.Id;
+                }
+            }
+            
             ViewData["ClienteId"] = new SelectList(_context.Users, "Id", "Id",cId);
+            ViewData["rId"] = rId;
+       
             return View();
         }
 
@@ -85,10 +99,12 @@ namespace PWEB.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Valor,TempoLevantamento,LimpezaCarro,FacilidadeEncontrar,Prestabilidade,VelocidadeDevolucao,CondicaoCarro,ClienteId")] Avaliacao avaliacao)
+        public async Task<IActionResult> Create(int rId, [Bind("Id,Valor,TempoLevantamento,LimpezaCarro,FacilidadeEncontrar,Prestabilidade,VelocidadeDevolucao,CondicaoCarro,ClienteId")] Avaliacao avaliacao)
         {
+            ModelState.Remove(nameof(avaliacao.Cliente));
             if (ModelState.IsValid)
             {
+                // primeiro adicionar avaliacao a BD e actualizar
                 _context.Add(avaliacao);
                 await _context.SaveChangesAsync();
 
@@ -107,7 +123,7 @@ namespace PWEB.Controllers
                 Include(r => r.empresa).
                 Include(r => r.EmpregadoCliente).
                 FirstOrDefaultAsync(r => r.Id == rId);
-                r.RecolhaId = recolha.Id;
+                r.AvaliacaoId = avaliacao.Id;
 
                 _context.Update(r);
 
@@ -149,6 +165,7 @@ namespace PWEB.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove(nameof(avaliacao.Cliente));
             if (ModelState.IsValid)
             {
                 try
