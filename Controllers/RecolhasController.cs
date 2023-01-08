@@ -120,15 +120,15 @@ namespace PWEB.Controllers
             if (ModelState.IsValid)
             {
 
+                // primeiro adicionar recolha a BD e actualizar
+                _context.Add(recolha);
+                await _context.SaveChangesAsync();
+
                 // adicionar a recolha a reseverva
                 if (_context.Reserva == null)
                 {
                     return NotFound();
                 }
-
-                // primeiro adicionar recolha a BD e actualizar
-                _context.Add(recolha);
-                await _context.SaveChangesAsync();
 
                 // actualizar a reserva com a recolha e adicionar a BD
                 var r = await _context.Reserva

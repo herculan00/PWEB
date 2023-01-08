@@ -110,16 +110,16 @@ namespace PWEB.Controllers
             ModelState.Remove(nameof(entrega.Empregado));
             if (ModelState.IsValid)
             {
-                // adicionar a entrega a reseverva
-                if (_context.Reserva == null)
-                {
-                    return NotFound();
-                }
 
                 // primeiro adicionar entrega a BD e actualizar
                 _context.Add(entrega);
                await _context.SaveChangesAsync();
 
+                // adicionar a entrega a reseverva
+                if (_context.Reserva == null)
+                {
+                    return NotFound();
+                }
                 // actualizar a reserva com a entrega e adicionar a BD
                 var r = await _context.Reserva
                 .Include(r => r.Avaliacao).

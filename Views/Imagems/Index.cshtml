@@ -37,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.Observaçoes)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.imagem)
+                    <img src="data:image/*;base64,@(Convert.ToBase64String(item.imagem))"  width="250" height="300" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Recolha.Id)

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PWEB.Data;
 using PWEB.Models;
+using PWEB.ViewModel;
 
 namespace PWEB.Controllers
 {
@@ -66,14 +67,46 @@ namespace PWEB.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Observaçoes,imagem,RecolhaId")] Imagem img)
+        public async Task<IActionResult> Create(IFormFile ImgFile2 ,[Bind("Id,Name,Observaçoes,imagem,RecolhaId")] Imagem I)
         {
-            ModelState.Remove(nameof(img.Recolha));
+
+
+            ModelState.Remove(nameof(I.Recolha));
             if (ModelState.IsValid)
             {
+                 // verificar se o ficheiro não é demasiado grande ou formatos nao suportado
+
+                if (ImgFile2 != null)
+                {
+                    if (ImgFile2.Length > (300 * 1024))
+                    {
+                        ErroViewModel e = new ErroViewModel();
+                        e.Mensagem = "Ficheiro demasiado grande";
+                        e.Controller = "Imagems";
+
+                        return View("Erro", e);
+                    }
+                    // método a implementar – verifica se a extensão é .png,.jpg,.jpeg
+                    var nomeFile = ImgFile2.FileName;
+                    if (nomeFile.Contains(".PNG") && nomeFile.Contains(".JPG") && nomeFile.Contains(".JPEG"))
+                    {
+                        ErroViewModel e = new ErroViewModel();
+                        e.Mensagem = "Formato não suportado ( Suportados: .png,.jpg,.jpeg)";
+                        e.Controller = "Imagems";
+
+                        return View("Erro", e);
+                    }
+
+                    // converter o ficheiro em array de byte
+                    var dataStream = new MemoryStream();
+                    await ImgFile2.CopyToAsync(dataStream);
+
+                    I.imagem = dataStream.ToArray();
+
+                }
 
                 // primeiro adicionar a imagem a BD
-                _context.Add(img);
+                _context.Add(I);
                 await _context.SaveChangesAsync();
 
                 // adicionar a imagem a recolhas
@@ -82,9 +115,9 @@ namespace PWEB.Controllers
                     return NotFound();
                 }
 
-                var r = _context.Recolhas 
+                var r = await _context.Recolhas 
                     .Include(r => r.Empregado)
-                    .FirstOrDefaultAsync(r => r.Id == img.RecolhaId);
+                    .FirstOrDefaultAsync(r => r.Id == I.RecolhaId);
 
                 _context.Update(r);
 
@@ -94,8 +127,8 @@ namespace PWEB.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id", img.RecolhaId);
-            return View(img);
+            ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id", I.RecolhaId);
+            return View(I);
         }
 
         // GET: Imagems/Edit/5
