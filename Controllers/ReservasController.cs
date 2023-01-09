@@ -47,8 +47,7 @@ namespace PWEB.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        [Authorize(Roles = "Admin,Funcionario,Gestor,Cliente")]
-
+       
         public async Task<IActionResult> Criar()
         {
             if (_context.Veiculos == null || _context.Empresas == null || _context.Reserva == null)
@@ -74,7 +73,8 @@ namespace PWEB.Controllers
             ViewData["rs"] = rs;
             ViewData["es"] = es;
 
-            return View( await _context.Veiculos.Include(v => v.Tipo).Include(v => v.empresa).ToListAsync());
+         
+            return View(await _context.Veiculos.Include(v => v.Tipo).Include(v => v.empresa).ToListAsync());
         }
 
         // GET: Reservas/Details/5

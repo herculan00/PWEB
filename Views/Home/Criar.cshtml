@@ -1,0 +1,128 @@
+﻿@model IEnumerable<PWEB.Models.Veiculo> 
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Primeiro selecione um veiculo</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Marca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modelo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lugares)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MudançasManuais)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreçoPorHora)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Localização)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponivel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eliminar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.empresa)
+            </th>
+            <th>
+                @Html.Encode("Classificacao")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.lVeiculo)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                   @item.Marca
+                </td>
+                <td>
+                   @item.Modelo
+                </td>
+                <td>
+                    @item.Lugares
+                </td>
+                <td>
+                   @item.MudançasManuais
+                </td>
+                <td>
+                    @item.PreçoPorHora
+                </td>
+                <td>
+                    @item.Localização
+                </td>
+                <td>
+                   @item.Disponivel
+                </td>
+                <td>
+                    @item.Eliminar
+                </td>
+                <td>
+                    @item.Tipo.Name
+                </td>
+                <td>
+                     @item.empresa.Nome
+                </td>
+                <td>
+                    @{
+                        double? r = 0.0;
+                        int c = 0;
+                        foreach (Empresa e in ViewBag.es)
+                        {
+                            if (e.Id == item.EmpresaId)
+                            {
+                                foreach (Reserva re in ViewBag.rs)
+                                {
+                                    if (re.EmpresaId == e.Id)
+                                    {
+                                        if (re.Avaliacao == null)
+                                        {
+                                            continue;
+                                        }
+                                        r += re.Avaliacao.Valor;
+                                        c++;
+                                    }
+                                }
+                            }
+                        }
+                        var result = r / c;
+                        if (result > 0)
+                        {
+                            @(result)
+                        }
+                        else
+                        {
+                            @(0)
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-controller="Reservas" asp-action="Create">Reservar</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

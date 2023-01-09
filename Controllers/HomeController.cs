@@ -46,15 +46,38 @@ namespace PWEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Localizacao,TipoId,Levantamento,Entrega")] InputInicial ip)
         {
+            if (_context.Veiculos == null || _context.Empresas == null || _context.Reserva == null)
+            {
+                return NotFound();
+            }
+
+            var rs = await _context.Reserva.
+                 Include(r => r.Avaliacao).
+                 Include(r => r.Entrega).
+                 Include(r => r.Recolha).
+                 Include(r => r.Veiculo).
+                 Include(r => r.empresa).ToArrayAsync();
+
+            var es = await _context.Empresas
+                .Include(e => e.Empregados)
+                .Include(e => e.Veiculos)
+                .Include(e => e.Subscricoes)
+                .Include(e => e.Avaliacoes)
+                .Include(e => e.Reservas).ToArrayAsync();
+
+
+            ViewData["rs"] = rs;
+            ViewData["es"] = es;
 
             if (_context.Empresas == null || _context.Veiculos == null)
             {
                 return NotFound();
             }
 
+            List<Veiculo> vArray = new List<Veiculo>();
+
             if (ModelState.IsValid)
             {
-                
                 // Primeiro encontra os veiculos que se encotram na localização desejada
 
                 var c = await _context.Veiculos
@@ -63,37 +86,74 @@ namespace PWEB.Controllers
                     .Where(v => v.Localização.Contains(ip.Localizacao) && v.Tipo.Id == ip.TipoId)
                     .ToListAsync();
 
+                if (c.Count == 0)
+                {
+                                
+                    ErroViewModel e = new ErroViewModel();
+                    e.Mensagem = "Não existem veiculos disponiveis com essas caracteristicas";
+                    e.Controller = "Home";
+
+                    return View("Erro", e);
+
+                }
+     
                 // Verificar se eles estao disponiveis na empresa na data desejada pelo utilizador 
 
-                var e = await _context.Empresas
-                    .Include(e => e.Empregados)
-                    .Include(e => e.Veiculos)
-                    .Include(e => e.Subscricoes)
-                    .Include(e => e.Avaliacoes)
-                    .Include(e => e.Reservas)
-                    .ToListAsync();
+                foreach (var carro in c)
+                {
+                    var emp = await _context.Empresas
+                     .Include(e => e.Empregados)
+                     .Include(e => e.Veiculos)
+                     .Include(e => e.Subscricoes)
+                     .Include(e => e.Avaliacoes)
+                     .Include(e => e.Reservas)
+                     .FirstOrDefaultAsync(e => e.Id == carro.EmpresaId);
 
-                var x = 45;
+                    foreach (var r in emp.Reservas)
+                    {
+                        if (r.VeiculoId == carro.Id)
+                        {
+                            // se a data pedida for antes da reserva existe te entao é valido
+                            if (ip.Entrega.CompareTo(r.DataDeLevantaneto) < 0)
+                            {
+                                if (!vArray.Contains(carro))
+                                {
+                                    vArray.Add(carro);
+                                }
+                            }
+                            // se a data pedida for depois da reserva existe te entao é valido
+                            if (ip.Levantamento.CompareTo(r.DataDeEntrega) > 0)
+                            {
+                                if (!vArray.Contains(carro))
+                                {
+                                    vArray.Add(carro);
+                                }
+                            }
 
-                //if (reserva.DataDeEntrega.CompareTo(reserva.DataDeLevantaneto) <= 0)
-                //{
-                //    ErroViewModel e = new ErroViewModel();
-                //    e.Mensagem = "A data de entrega não pode ser anterior á data de levantamento!";
-                //    e.Controller = "Reservas";
+                        }
+                    }
+                }
 
-                //    return View("Erro", e);
-                //}
+
             }
 
-            //ViewData["AvaliacaoId"] = new SelectList(_context.Avaliacoes, "Id", "Id", reserva.AvaliacaoId);
-            //ViewData["EntregaId"] = new SelectList(_context.Entregas, "Id", "Id", reserva.EntregaId);
-            //ViewData["RecolhaId"] = new SelectList(_context.Recolhas, "Id", "Id", reserva.RecolhaId);
-            //ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id", reserva.VeiculoId);
+            if (vArray.Count == 0)
+            {
+
+                ErroViewModel e = new ErroViewModel();
+                e.Mensagem = "Não existem veiculos disponiveis com essas caracteristicas";
+                e.Controller = "Home";
+
+                return View("Erro", e);
+
+            }
 
             ViewData["tipo"] = new SelectList(_context.TiposVeis, "Id", "Name");
-
-            return View(ip);
+            ViewData["lVeiculos"] = vArray;
+            return RedirectToAction("Criar", "Reservas");
         }
+
+      
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
